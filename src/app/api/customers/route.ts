@@ -10,13 +10,23 @@ export async function GET(req: NextRequest) {
   const query = searchParams.get('q');
 
   try {
+    const body: any = {
+      sorts: [{ property: 'Community Name', direction: 'ascending' }],
+      page_size: 100
+    };
+
+    if (query) {
+      body.filter = {
+        property: 'Community Name',
+        title: {
+          contains: query
+        }
+      };
+    }
+
     const data = await notionFetch(`/databases/${DATABASE_ID}/query`, {
       method: 'POST',
-      body: JSON.stringify({
-        filter: query ? { property: 'Community Name', title: { contains: query } } : undefined,
-        sorts: [{ property: 'Community Name', direction: 'ascending' }],
-        page_size: 50
-      })
+      body: JSON.stringify(body)
     });
 
     const results = (data.results || []).map(mapNotionToCustomer);
@@ -33,6 +43,7 @@ export async function POST(req: NextRequest) {
     const customer = await req.json();
     const isUpdate = !!customer.id;
     
+    // Delta strategy: Only include what's needed
     const properties: any = {
       'Community Name': { title: [{ text: { content: customer.communityName || '' } }] },
       'Overview': { rich_text: [{ text: { content: customer.overview || '' } }] },
@@ -62,6 +73,7 @@ export async function POST(req: NextRequest) {
       'Price Per Hour': { number: Number(customer.price1y) || 30 },
     };
 
+    // Only update schedule dates that are present in the payload
     if (customer.schedule) {
       Object.entries(customer.schedule).forEach(([date, s]: [string, any]) => {
         if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {

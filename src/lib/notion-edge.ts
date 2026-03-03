@@ -14,8 +14,7 @@ export function getHeaders() {
 export async function notionFetch(endpoint: string, options: RequestInit = {}) {
   const token = getNotionToken();
   if (!token) {
-    console.error('NOTION_TOKEN is not defined in environment variables');
-    throw new Error('Missing NOTION_TOKEN');
+    throw new Error('Missing NOTION_TOKEN in environment variables');
   }
 
   const url = `https://api.notion.com/v1${endpoint}`;

@@ -5,7 +5,7 @@ import React from 'react';
 import type { Customer } from '@/lib/types';
 import { format } from 'date-fns';
 
-const LOGO_URL = "https://images.squarespace-cdn.com/content/v1/5d7d3ee9449c8406a3cae3a8/70b8519c-192a-4212-9b9b-886f25b997f5/The+Pool+Attendant+Company+%28500+x+200+px%29+%281%29.png?format=1500w";
+const LOGO_URL = "https://images.squarespace-cdn.com/content/v1/5d7d3ee9449c8406a3cae3a8/70b8519c-192a-4212-9b9b-886f25b997f5/The+Pool+Attendant Company+%28500+x+200+px%29+%281%29.png?format=1500w";
 
 export function AgreementPreview({ customer }: { customer: Customer }) {
   const p1 = customer.price1y || 30;
@@ -126,6 +126,10 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
             -webkit-print-color-adjust: exact; 
             print-color-adjust: exact;
           }
+          .print-page {
+            box-shadow: none !important;
+            border: none !important;
+          }
         }
         .print-page {
           width: 8.5in;
@@ -181,7 +185,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           z-index: 2;
         }
         .bold { font-weight: bold; }
-        .fill-label { font-size: 14pt; font-weight: bold; margin-bottom: 8px; display: block; margin-top: 10px; }
+        .fill-label { font-size: 14pt; font-weight: bold; margin-bottom: 8px; display: block; margin-top: 12px; }
         .center { text-align: center; }
         .section-title { font-weight: bold; text-decoration: underline; margin-bottom: 6px; margin-top: 15px; font-size: 12pt; text-transform: uppercase; }
         table { width: 100%; border-collapse: collapse; font-size: 10.5pt; margin: 10px 0; }
@@ -235,7 +239,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           <p><span className="bold">2.1 Workers Compensation:</span> Limits of $100,000 per Accident / $500,000 per Policy. Includes a waiver of subrogation in favor of THE ASSOCIATION and the developer if applicable.</p>
           <p><span className="bold">2.2 General Liability Insurance:</span> Limits of a minimum $1,000,000 per Occurrence / $2,000,000 Aggregate. Includes additional insured status in favor of THE ASSOCIATION, the Owner and Management Company with a waiver of subrogation in favor of the certificate holder. To be added as an additional insured, The Association must contact TPAC via electronic communication sent to admin@thepoolattendantcompany.com.</p>
           <p><span className="bold">2.3 Commercial Auto Insurance:</span> Limits of $1,000,000 per Occurrence. Covers all non-owned and hired autos.</p>
-          <p><span className="bold">2.4 Certificates of Insurance:</span> TPAC agrees to supply copies of Certificate of Insurance (Certificate) to THE ASSOCIATION verifying the above-mentioned insurance coverages on the ACORD 25 form (version 2009/01 or later). The Certificate should also provide for a written notice of cancellation to Certificate Holder(s) in accordance with the policy provisions. The Pool Attendant Company shall make available to THE ASSOCIATION, through its records or through the records of its insurers, information regarding any specific claim no later than 5 business days after the request.</p>
+          <p><span className="bold">2.4 Certificates of Insurance:</span> TPAC agrees to supply copies of Certificate of Insurance (Certificate) to THE ASSOCIATION verifying the above-mentioned insurance coverages on the ACORD 25 form (version 2009/01 or later). The Certificate should also provide for a written notice of cancellation to Certificate Holder(s) in accordance with the policy provisions. The Pool Attendant Company shall make available to THE ASSOCIATION, through its records or through the records of its insurers, information regarding any specific claim no later than 5 business days after the request. Failure by THE ASSOCIATION to request such certificate or other evidence of full compliance with these insurance requirements or failure of THE ASSOCIATION to identify a deficiency from evidence that is provided shall not be construed as a waiver of TPAC’s obligation to maintain the insurances disclosed within this agreement.</p>
         </>
       ))}
 
@@ -250,8 +254,8 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           <div className="section-title">4.0 CONTRACT DURATION</div>
           <p>The duration of amenity monitoring contracts with The Pool Attendant Company ("TPAC") offers flexibility tailored to the specific needs of The Association. Three distinct contract options are available: one-season, two-season, and three-season contracts.</p>
           <p><span className="bold">4.1 One-Season Contract:</span> Duration: 1 Season. Pricing: Please refer to Section 6.1.</p>
-          <p><span className="bold">4.2 Two-Season Contract:</span> Duration: 2 Consecutive Seasons. Pricing: {fmtMoney(p2)} per pool attendant hour.</p>
-          <p><span className="bold">4.3 Three-Season Contract:</span> Duration: 3 Seasons. Pricing: {fmtMoney(p3)} per pool attendant hour (lowest locked rate).</p>
+          <p><span className="bold">4.2 Two-Season Contract:</span> Duration: 2 Consecutive Seasons. Pricing: <span className="bold">{fmtMoney(p2)}</span> per pool attendant hour.</p>
+          <p><span className="bold">4.3 Three-Season Contract:</span> Duration: 3 Seasons. Pricing: <span className="bold">{fmtMoney(p3)}</span> per pool attendant hour (lowest locked rate).</p>
         </>
       ))}
 
@@ -262,7 +266,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           <p><span className="bold">5.1 Invoice Issuance:</span> Invoices will be issued by TPAC 30 days prior to the start of the service month. This advance notice serves to provide The Association with ample time to review and prepare for payment.</p>
           <p><span className="bold">Example Timeline:</span> Invoice Issued: January 1st. Payment Due: January 31st (for services rendered in February)</p>
           <p><span className="bold">5.2 Payment Terms:</span> TPAC operates under upfront net 30 terms, signifying that payments are to be made in full within 30 days of the invoice date and/or the day before the specified month is to begin.</p>
-          <p><span className="bold">5.3 Adjustments for Hour Discrepancies:</span> In situations where there are discrepancies in hours worked totaling 1 hour or more in a specific month, TPAC employs standard procedures for under/overpayment. Necessary worked hours that were unpaid will be included in the next immediate invoice.</p>
+          <p><span className="bold">5.3 Adjustments for Hour Discrepancies:</span> In situations where there are discrepancies in hours worked totaling 1 hour or more in a specific month, TPAC employs standard procedures for under/overpayment. Necessary worked hours that were unpaid will be included in the next immediate invoice. Overpayment: Excess hours billed beyond actual worked hours will be reimbursed automatically.</p>
           <p><span className="bold">5.4 Late Payment Terms and Penalties:</span> All payments received seven (7) days after their due date shall incur a 3% fee. Should an invoice go beyond fourteen (14) days past its due date without payment, TPAC shall reserve the right to chose to withhold services.</p>
         </>
       ))}
@@ -289,8 +293,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           <p><span className="bold">8.1 Liability:</span> TPAC shall remain liable for actions and negligence of its employees. However, TPAC assumes no liability for inherent property design defects or actions of third parties.</p>
           <p><span className="bold">8.2 Indemnification Provisions:</span> TPAC and The Association agree to mutual indemnification for claims arising from their respective performance, except in cases of gross negligence.</p>
           <div className="section-title">9.0 COMPLIANCE WITH LAWS</div>
-          <p>Both TPAC and The Association shall fully adhere to all relevant local, state, and federal laws, maintaining all required licenses and insurance coverage.</p>
-          <p><span className="bold">9.1 Obligations of the Parties:</span> Each party shall maintain all required licenses, permits, and certifications. TPAC shall comply with all health, safety, and sanitation standards.</p>
+          <p>Both TPAC and The Association shall fully adhere to all relevant local, state, and federal laws, maintaining all required licenses and insurance coverage. If either party's failure to comply with applicable laws leads to a breach, the non-compliant party shall bear responsibility for any damages.</p>
         </>
       ))}
 
@@ -318,7 +321,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
             ☐ Three Seasons - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p3)}/hr</span>.
           </div>
           <div className="bold mt-4">Limitations</div>
-          <p>The total hourly labor volume for one season is <span className="underline">&nbsp;{totalHours.toFixed(1)}&nbsp;</span> pool attendant hours. It is assumed that this amount of hours will be repeated for each season. The Association may adjust staffing schedules without penalty, provided that the overall volume does not decrease by more than 20% of the originally contracted total.</p>
+          <p>The total hourly labor volume for one season is <span className="underline">&nbsp;{totalHours.toFixed(1)}&nbsp;</span> pool attendant hours. It is assumed that this amount of hours will be repeated for each season. The Association may adjust staffing schedules without penalty, provided that the overall volume does not decrease by more than 20% of the originally contracted total. This limitation applies cumulatively across all contracted seasons.</p>
         </>
       ))}
 
@@ -338,7 +341,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
             <p className="fill-label">Signature: _______________________________________________________</p>
             <p className="fill-label">Date: __________________________</p>
           </div>
-          <p className="mt-6 italic text-sm">By executing the above, the parties acknowledge and agree that this agreement is effective, binding, and enforceable as of this date.</p>
+          <p className="mt-6 italic text-sm">By executing the above, the parties acknowledge and agree that this agreement is effective, binding, and enforceable as of this date. By signing, the parties affirm their intention to be legally bound by the terms and commit to strict performance of all obligations.</p>
         </>
       ))}
 
@@ -352,6 +355,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
             <tbody>{tableRows}{totalRow}</tbody>
           </table>
           <p className="bold mt-6">Notes: <span className="underline">{customer.notes || "None"}</span></p>
+          <p style={{fontSize: '10pt', marginTop: '20px', fontStyle: 'italic'}}>These tables serve as a means to convey the estimated cost to The Association only. This estimated price is subject to change pending factors disclosed in this agreement.</p>
           <div className="bold mt-8">Special Considerations / Notes:</div>
           <div style={{ border: '1px solid #000', height: '180px', marginTop: '5px' }}></div>
         </>
