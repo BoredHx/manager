@@ -1,24 +1,40 @@
-const NOTION_TOKEN = process.env.NOTION_TOKEN;
 
-const headers = {
-  'Authorization': `Bearer ${NOTION_TOKEN}`,
-  'Content-Type': 'application/json',
-  'Notion-Version': '2022-06-28'
-};
+export function getNotionToken() {
+  return process.env.NOTION_TOKEN;
+}
+
+export function getHeaders() {
+  return {
+    'Authorization': `Bearer ${getNotionToken()}`,
+    'Content-Type': 'application/json',
+    'Notion-Version': '2022-06-28'
+  };
+}
 
 export async function notionFetch(endpoint: string, options: RequestInit = {}) {
+  const token = getNotionToken();
+  if (!token) {
+    console.error('NOTION_TOKEN is not defined in environment variables');
+    throw new Error('Missing NOTION_TOKEN');
+  }
+
   const url = `https://api.notion.com/v1${endpoint}`;
   const res = await fetch(url, {
     ...options,
-    headers: { ...headers, ...options.headers }
+    headers: { ...getHeaders(), ...options.headers }
   });
-  if (!res.ok) throw new Error('Notion API Request Failed');
+  
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({}));
+    throw new Error(errorBody.message || `Notion API error: ${res.status}`);
+  }
   return res.json();
 }
 
 export function mapNotionToCustomer(page: any) {
   const props = page.properties;
   const schedule: Record<string, any> = {};
+  
   for (const key in props) {
     if (key.length === 10 && key[4] === '-' && key[7] === '-') {
       const textContent = props[key]?.rich_text;
@@ -31,6 +47,7 @@ export function mapNotionToCustomer(page: any) {
       }
     }
   }
+
   return {
     id: page.id,
     communityName: props['Community Name']?.title?.[0]?.plain_text || '',

@@ -1,11 +1,11 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { notionFetch, mapNotionToCustomer } from '@/lib/notion-edge';
 
 export const runtime = 'edge';
 
-const DATABASE_ID = process.env.DATABASE_ID || '289ff85a-fa89-8075-957a-d242fd5acbac';
-
 export async function GET(req: NextRequest) {
+  const DATABASE_ID = process.env.DATABASE_ID || '289ff85a-fa89-8075-957a-d242fd5acbac';
   const { searchParams } = new URL(req.url);
   const query = searchParams.get('q');
 
@@ -22,11 +22,13 @@ export async function GET(req: NextRequest) {
     const results = (data.results || []).map(mapNotionToCustomer);
     return NextResponse.json(results);
   } catch (error: any) {
+    console.error('Customer Search API Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
+  const DATABASE_ID = process.env.DATABASE_ID || '289ff85a-fa89-8075-957a-d242fd5acbac';
   try {
     const customer = await req.json();
     const isUpdate = !!customer.id;
@@ -45,13 +47,11 @@ export async function POST(req: NextRequest) {
       'Billing Email': { email: customer.billingEmail || null },
       'Billing Phone Number': { number: customer.billingPhone ? Number(customer.billingPhone) : null }, 
       'Billing Street': { rich_text: [{ text: { content: customer.billingStreet1 || '' } }] },
-      'Billing Street 2nd Line': { rich_text: [{ text: { content: customer.billingStreet2 || '' } }] },
       'Billing City': { rich_text: [{ text: { content: customer.billingCity || '' } }] },
       'Billing State': customer.billingState ? { select: { name: customer.billingState } } : { select: null },
       'Billing ZIp Code': { rich_text: [{ text: { content: customer.billingZip || '' } }] },
       'Location Address Full': { rich_text: [{ text: { content: customer.locationFull || '' } }] },
       'Location Address Line 1': { rich_text: [{ text: { content: customer.locStreet1 || '' } }] },
-      'Location Address Line 2': { rich_text: [{ text: { content: customer.locStreet2 || '' } }] },
       'Location Address City': { rich_text: [{ text: { content: customer.locCity || '' } }] },
       'Location Address State': customer.locState ? { select: { name: customer.locState } } : { select: null },
       'Location Address Zip Code': { rich_text: [{ text: { content: customer.locZip || '' } }] },
@@ -85,6 +85,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(mapNotionToCustomer(data));
   } catch (error: any) {
+    console.error('Customer POST API Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -9,7 +10,7 @@ const MONTHS_2026 = [
   { name: 'January', index: 0 }, { name: 'February', index: 1 }, { name: 'March', index: 2 },
   { name: 'April', index: 3 }, { name: 'May', index: 4 }, { name: 'June', index: 5 },
   { name: 'July', index: 6 }, { name: 'August', index: 7 }, { name: 'September', index: 8 },
-  { name: 'October', index: 9 }, { name: 'November', index: 10 }, { name: 'December', index: 11 },
+  { name: 'January', index: 9 }, { name: 'November', index: 10 }, { name: 'December', index: 11 },
 ];
 
 const DAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -32,13 +33,13 @@ export function CalendarGrid({ schedule, onDateClick }: { schedule: Record<strin
       );
     }
     return (
-      <Card key={monthName} className="mb-4">
+      <Card key={`${monthName}-${monthIndex}`} className="mb-4">
         <CardHeader className="py-2 px-3 bg-secondary/50">
           <CardTitle className="text-sm font-bold text-primary">{monthName}</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="grid grid-cols-7 border-t">
-            {DAY_LABELS.map((d, i) => <div key={`${monthName}-h-${i}`} className="text-center py-1 font-bold text-[10px] bg-muted/10 border-b">{d}</div>)}
+            {DAY_LABELS.map((d, i) => <div key={`${monthName}-${monthIndex}-h-${i}`} className="text-center py-1 font-bold text-[10px] bg-muted/10 border-b">{d}</div>)}
             {days}
           </div>
         </CardContent>
