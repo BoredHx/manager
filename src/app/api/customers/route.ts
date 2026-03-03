@@ -31,7 +31,6 @@ export async function POST(req: NextRequest) {
     const customer = await req.json();
     const isUpdate = !!customer.id;
     
-    // Core properties mapping
     const properties: any = {
       'Community Name': { title: [{ text: { content: customer.communityName || '' } }] },
       'Overview': { rich_text: [{ text: { content: customer.overview || '' } }] },
@@ -63,23 +62,12 @@ export async function POST(req: NextRequest) {
       'Price Per Hour': { number: Number(customer.price1y) || 30 },
     };
 
-    // Optimization: Only update date properties that exist in the payload
-    // This significantly improves latency by reducing request size
     if (customer.schedule) {
       Object.entries(customer.schedule).forEach(([date, s]: [string, any]) => {
         if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
           if (s.hasShift) {
-            const content = JSON.stringify({
-              hasShift: true,
-              startTime: s.startTime,
-              endTime: s.endTime,
-              employees: s.employees,
-              hours: s.hours,
-              date: date
-            });
-            properties[date] = { rich_text: [{ text: { content } }] };
+            properties[date] = { rich_text: [{ text: { content: JSON.stringify(s) } }] };
           } else {
-            // Explicitly clear property if shift removed
             properties[date] = { rich_text: [] };
           }
         }

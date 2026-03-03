@@ -116,11 +116,12 @@ export async function saveCustomer(customer: Customer) {
     'Price Per Hour': { number: Number(customer.price1y) || 30 },
   };
 
+  // Process only changed or existing shifts
   Object.entries(customer.schedule).forEach(([date, s]) => {
     if (s.hasShift) {
       properties[date] = { rich_text: [{ text: { content: JSON.stringify(s) } }] };
-    } else {
-      properties[date] = { rich_text: [] };
+    } else if (properties[date]) {
+       properties[date] = { rich_text: [] };
     }
   });
 
