@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -33,6 +34,7 @@ export default function Dashboard() {
   const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
   const [isUnsaved, setIsUnsaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   
   // Modals
   const [dayModalOpen, setDayModalOpen] = useState(false);
@@ -40,21 +42,37 @@ export default function Dashboard() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   // SWR for customers list
-  const { data: searchResults = [], isLoading: listLoading } = useSWR<Customer[]>(
+  const { data: searchResults = [], isLoading: listLoading, error: searchError } = useSWR<Customer[]>(
     debouncedQuery ? `/api/customers?q=${debouncedQuery}` : '/api/customers',
     fetcher,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false, dedupingInterval: 10000 }
   );
 
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedQuery(searchQuery), 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+  const handleSearchTrigger = () => {
+    setDebouncedQuery(searchQuery);
+  };
 
-  const handleSelectCustomer = (customer: Customer) => {
+  const handleSelectCustomer = async (customer: Customer) => {
     if (isUnsaved && !confirm('Discard unsaved changes?')) return;
-    setCurrentCustomer(customer);
-    setIsUnsaved(false);
+    
+    setIsLoadingDetails(true);
+    try {
+      // Fetch full details (including schedule) for the selected customer
+      const res = await fetch(`/api/customers?q=${customer.communityName}&full=true`);
+      const data = await res.json();
+      const fullCust = Array.isArray(data) ? data.find(c => c.id === customer.id) : null;
+      
+      if (fullCust) {
+        setCurrentCustomer(fullCust);
+        setIsUnsaved(false);
+      } else {
+        throw new Error("Could not find full customer details");
+      }
+    } catch (e: any) {
+      toast({ title: "Failed to load details", description: e.message, variant: "destructive" });
+    } finally {
+      setIsLoadingDetails(false);
+    }
   };
 
   const handleNewCustomer = () => {
@@ -172,7 +190,7 @@ export default function Dashboard() {
       cost2: hours * price * 0.98,
       cost3: hours * price * 0.96
     };
-  }, [currentCustomer]);
+  }, [currentCustomer, currentCustomer?.schedule, currentCustomer?.price1y]);
 
   return (
     <div className="flex h-screen bg-background overflow-hidden font-body">
@@ -187,14 +205,20 @@ export default function Dashboard() {
         </div>
         
         <div className="p-4 border-b bg-slate-50/50">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search communities..." 
-              className="pl-9 h-9 bg-white"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-            />
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input 
+                placeholder="Search..." 
+                className="pl-9 h-9 bg-white"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSearchTrigger()}
+              />
+            </div>
+            <Button size="sm" onClick={handleSearchTrigger} className="h-9 px-3">
+              Go
+            </Button>
           </div>
         </div>
 
@@ -215,6 +239,16 @@ export default function Dashboard() {
                 <Loader2 className="w-6 h-6 mx-auto animate-spin text-primary opacity-50" />
               </div>
             )}
+            {searchError && (
+              <div className="p-4 text-center text-xs text-destructive">
+                Failed to load customers. Please check Notion Token.
+              </div>
+            )}
+            {!listLoading && searchResults.length === 0 && debouncedQuery && (
+              <div className="p-8 text-center text-xs text-muted-foreground italic">
+                No results found for "{debouncedQuery}"
+              </div>
+            )}
           </div>
         </ScrollArea>
       </div>
@@ -224,7 +258,10 @@ export default function Dashboard() {
           <>
             <div className="h-16 border-b bg-white flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
               <div className="flex items-center gap-4 overflow-hidden">
-                <h1 className="text-xl font-bold text-primary truncate">{currentCustomer.communityName}</h1>
+                <h1 className="text-xl font-bold text-primary truncate">
+                  {currentCustomer.communityName}
+                  {isLoadingDetails && <Loader2 className="w-4 h-4 inline ml-2 animate-spin text-muted-foreground" />}
+                </h1>
                 {isUnsaved && <Badge variant="destructive" className="animate-pulse gap-1"><AlertTriangle className="w-3 h-3" /> Unsaved Changes</Badge>}
               </div>
               <div className="flex items-center gap-2">
@@ -293,7 +330,7 @@ export default function Dashboard() {
               <FileCheck className="w-12 h-12 text-primary/40" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Manager Dashboard</h2>
-            <p className="text-muted-foreground max-w-md mx-auto mb-8">Search for a community to manage schedules and generate agreements.</p>
+            <p className="text-muted-foreground max-w-md mx-auto mb-8">Search for a community in the sidebar to begin managing schedules.</p>
             <Button onClick={handleNewCustomer} className="bg-primary h-12 px-8 font-bold">
               <Plus className="w-5 h-5 mr-2" /> Add New Community
             </Button>

@@ -85,14 +85,17 @@ export function WeeklyTemplateModal({ isOpen, onClose, onApply }: { isOpen: bool
                   <div className="space-y-2">
                     <Select value={template[day].startTime} onValueChange={v => updateTemplate(day, { startTime: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent className="max-h-40">{TIME_OPTIONS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select>
                     <Select value={template[day].endTime} onValueChange={v => updateTemplate(day, { endTime: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent className="max-h-40">{TIME_OPTIONS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select>
-                    <Input type="number" value={template[day].employees} onChange={(e) => updateTemplate(day, { employees: parseInt(e.target.value) || 1 })} className="h-7 text-xs text-center" />
+                    <div className="space-y-1">
+                      <Label className="text-[10px]">Staff</Label>
+                      <Input type="number" value={template[day].employees} onChange={(e) => updateTemplate(day, { employees: parseInt(e.target.value) || 1 })} className="h-7 text-xs text-center" />
+                    </div>
                   </div>
                 )}
               </div>
             ))}
           </div>
         </div>
-        <DialogFooter><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={() => onApply(range.start, range.end, template)} className="bg-primary">Apply</Button></DialogFooter>
+        <DialogFooter><Button variant="outline" onClick={onClose}>Cancel</Button><Button onClick={() => onApply(range.start, range.end, template)} className="bg-primary">Apply Template</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   );

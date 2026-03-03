@@ -8,12 +8,12 @@ export async function GET(req: NextRequest) {
   const DATABASE_ID = process.env.DATABASE_ID;
   const { searchParams } = new URL(req.url);
   const query = searchParams.get('q');
+  const full = searchParams.get('full') === 'true';
 
   try {
     const body: any = {
       sorts: [{ property: 'Community Name', direction: 'ascending' }],
-      // Smaller page size for initial load to prevent 504 timeouts
-      page_size: 40 
+      page_size: query ? 50 : 20 
     };
 
     if (query) {
@@ -30,8 +30,8 @@ export async function GET(req: NextRequest) {
       body: JSON.stringify(body)
     });
 
-    // Map results with optimized function
-    const results = (data.results || []).map(mapNotionToCustomer);
+    // Use lightweight mapping (no schedule) for search results unless 'full' is requested
+    const results = (data.results || []).map((page: any) => mapNotionToCustomer(page, full));
     
     return NextResponse.json(results);
   } catch (error: any) {
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(body)
     });
 
-    return NextResponse.json(mapNotionToCustomer(data));
+    return NextResponse.json(mapNotionToCustomer(data, true));
   } catch (error: any) {
     console.error('Customer POST API Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
