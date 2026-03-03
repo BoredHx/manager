@@ -5,14 +5,15 @@ import { notionFetch, mapNotionToCustomer } from '@/lib/notion-edge';
 export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
-  const DATABASE_ID = process.env.DATABASE_ID || '289ff85a-fa89-8075-957a-d242fd5acbac';
+  const DATABASE_ID = process.env.DATABASE_ID;
   const { searchParams } = new URL(req.url);
   const query = searchParams.get('q');
 
   try {
     const body: any = {
       sorts: [{ property: 'Community Name', direction: 'ascending' }],
-      page_size: 100
+      // Smaller page size for initial load to prevent 504 timeouts
+      page_size: 40 
     };
 
     if (query) {
@@ -29,7 +30,9 @@ export async function GET(req: NextRequest) {
       body: JSON.stringify(body)
     });
 
+    // Map results with optimized function
     const results = (data.results || []).map(mapNotionToCustomer);
+    
     return NextResponse.json(results);
   } catch (error: any) {
     console.error('Customer Search API Error:', error);
@@ -38,7 +41,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const DATABASE_ID = process.env.DATABASE_ID || '289ff85a-fa89-8075-957a-d242fd5acbac';
+  const DATABASE_ID = process.env.DATABASE_ID;
   try {
     const customer = await req.json();
     const isUpdate = !!customer.id;
@@ -73,7 +76,6 @@ export async function POST(req: NextRequest) {
       'Price Per Hour': { number: Number(customer.price1y) || 30 },
     };
 
-    // Only update schedule dates that are present in the payload
     if (customer.schedule) {
       Object.entries(customer.schedule).forEach(([date, s]: [string, any]) => {
         if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {

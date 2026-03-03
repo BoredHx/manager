@@ -30,19 +30,31 @@ export async function notionFetch(endpoint: string, options: RequestInit = {}) {
   return res.json();
 }
 
+/**
+ * Optimized mapping function to handle large databases with many properties.
+ * Reduces iterations and parses only necessary data.
+ */
 export function mapNotionToCustomer(page: any) {
   const props = page.properties;
   const schedule: Record<string, any> = {};
   
-  for (const key in props) {
+  // High-performance property extraction
+  const keys = Object.keys(props);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    // Only check for date-like keys (YYYY-MM-DD)
     if (key.length === 10 && key[4] === '-' && key[7] === '-') {
-      const textContent = props[key]?.rich_text;
-      if (textContent && textContent.length > 0) {
-        const plainText = textContent[0]?.plain_text || textContent[0]?.text?.content;
-        try {
-          const shift = JSON.parse(plainText);
-          if (shift.hasShift) schedule[key] = { ...shift, date: key };
-        } catch (e) {}
+      const prop = props[key];
+      if (prop.type === 'rich_text' && prop.rich_text?.length > 0) {
+        const text = prop.rich_text[0].plain_text || prop.rich_text[0].text?.content;
+        if (text && text.startsWith('{')) {
+          try {
+            const shift = JSON.parse(text);
+            if (shift.hasShift) schedule[key] = { ...shift, date: key };
+          } catch (e) {
+            // Silently ignore malformed JSON to keep processing fast
+          }
+        }
       }
     }
   }
