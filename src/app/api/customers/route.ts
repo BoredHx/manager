@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
     const customer = await req.json();
     const isUpdate = !!customer.id;
     
-    // Delta strategy: Only include what's needed
     const properties: any = {
       'Community Name': { title: [{ text: { content: customer.communityName || '' } }] },
       'Overview': { rich_text: [{ text: { content: customer.overview || '' } }] },

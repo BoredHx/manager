@@ -61,7 +61,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           );
         }
         return (
-          <div key={mIdx} className="border border-slate-300 break-inside-avoid">
+          <div key={mIdx} className="border border-slate-300 break-inside-avoid shadow-sm rounded-sm overflow-hidden">
             <div className="bg-slate-800 text-white text-center py-0.5 font-bold text-[10px] uppercase">{mNames[mIdx]}</div>
             <div className="grid grid-cols-7 gap-[1px] bg-slate-100">
               {days}
@@ -80,13 +80,13 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           .filter(([date, s]) => s.hasShift && new Date(date + 'T12:00:00').getMonth() === mIdx)
           .sort((a, b) => a[0].localeCompare(b[0]));
         return (
-          <div key={mIdx} className="border border-slate-300 break-inside-avoid">
+          <div key={mIdx} className="border border-slate-300 break-inside-avoid shadow-sm rounded-sm overflow-hidden">
             <div className="bg-slate-800 text-white text-center py-0.5 font-bold text-[10px] uppercase">{mNames[mIdx]}</div>
             <div className="p-1 space-y-0.5">
               {monthShifts.map(([date, s]) => (
                 <div key={date} className="flex justify-between border-b border-slate-50 text-[9px] font-sans">
                   <span className="font-bold">{parseInt(date.split('-')[2])}</span>
-                  <span>{s.startTime}-{s.endTime} ({s.employees})</span>
+                  <span>{s.startTime}-{s.endTime} ({s.employees}x)</span>
                 </div>
               ))}
               {monthShifts.length === 0 && <div className="text-slate-300 italic text-[9px] font-sans text-center">No Shifts</div>}
@@ -108,8 +108,8 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
         {content}
       </div>
       <div className="footer-area">
-        <span className="bold uppercase">The Pool Attendant Company</span>
-        <span className="bold uppercase">Page {pageNum} of 15</span>
+        <div className="flex-1 text-left uppercase text-[9pt] font-bold">The Pool Attendant Company</div>
+        <div className="flex-1 text-right uppercase text-[9pt] font-bold">Page {pageNum} of 15</div>
       </div>
     </div>
   );
@@ -144,28 +144,26 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           color: #000;
           font-family: 'Times New Roman', serif;
           font-size: 11.5pt;
-          line-height: 1.3;
+          line-height: 1.4;
           overflow: hidden;
         }
         .header-area { 
           display: flex; 
           justify-content: space-between; 
-          border-bottom: 2px solid #000; 
-          margin-bottom: 15px; 
+          border-bottom: 2.5px solid #000; 
+          margin-bottom: 20px; 
           padding-bottom: 4px; 
-          font-size: 11pt; 
+          font-size: 10pt; 
           font-weight: bold;
           position: relative;
           z-index: 2;
         }
         .footer-area { 
-          border-top: 2px solid #000; 
+          border-top: 2.5px solid #000; 
           padding-top: 8px; 
-          font-size: 10pt; 
           display: flex; 
           justify-content: space-between; 
           margin-top: auto;
-          font-weight: bold;
           position: relative;
           z-index: 2;
         }
@@ -174,7 +172,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           top: 50%; 
           left: 50%; 
           transform: translate(-50%, -50%); 
-          width: 70%; 
+          width: 80%; 
           opacity: 0.08; 
           z-index: 1; 
           pointer-events: none; 
@@ -185,29 +183,29 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           z-index: 2;
         }
         .bold { font-weight: bold; }
-        .fill-label { font-size: 14pt; font-weight: bold; margin-bottom: 8px; display: block; margin-top: 12px; }
+        .fill-label { font-size: 14pt; font-weight: bold; margin-bottom: 8px; display: block; margin-top: 15px; }
         .center { text-align: center; }
-        .section-title { font-weight: bold; text-decoration: underline; margin-bottom: 6px; margin-top: 15px; font-size: 12pt; text-transform: uppercase; }
-        table { width: 100%; border-collapse: collapse; font-size: 10.5pt; margin: 10px 0; }
-        th, td { border: 1.5px solid #000; padding: 4px; text-align: center; }
+        .section-title { font-weight: bold; text-decoration: underline; margin-bottom: 8px; margin-top: 20px; font-size: 12.5pt; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; font-size: 10pt; margin: 12px 0; }
+        th, td { border: 1.5px solid #000; padding: 5px; text-align: center; }
         th { background: #f0f0f0; font-weight: bold; }
-        .sched-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px; }
-        p, li { margin-bottom: 8px; text-align: justify; }
+        .sched-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 10px; }
+        p, li { margin-bottom: 10px; text-align: justify; }
         .underline { text-decoration: underline; }
       `}</style>
 
       {/* Page 1 */}
       {renderPage(1, (
         <>
-          <div className="center mb-6">
-            <div className="bold" style={{ fontSize: '18pt' }}>Service Agreement</div>
-            <div className="bold" style={{ fontSize: '15pt' }}>The Pool Attendant Company</div>
-            <div style={{ marginTop: '10px', fontSize: '13pt' }}>for the consideration of: <span className="bold underline">{customer.communityName}</span></div>
+          <div className="center mb-10">
+            <div className="bold" style={{ fontSize: '22pt', marginBottom: '8px' }}>Service Agreement</div>
+            <div className="bold" style={{ fontSize: '18pt', color: '#1a365d' }}>The Pool Attendant Company</div>
+            <div style={{ marginTop: '20px', fontSize: '14pt' }}>for the consideration of: <span className="bold underline">{customer.communityName}</span></div>
           </div>
           <div className="fill-label">Community Address(es): <span className="underline">{customer.locationFull || "________________________________"}</span></div>
           <div className="fill-label">2026 Season Start Date: <span className="underline">{fmtDate(customer.startDate)}</span></div>
           <div className="fill-label">2026 Season End Date: <span className="underline">{fmtDate(customer.endDate)}</span></div>
-          <p>This Agreement is made and entered into by and between <span className="bold">{customer.communityName}</span>, hereinafter referred to as "THE ASSOCIATION," and THE POOL ATTENDANT COMPANY (TPAC), hereinafter referred to as "TPAC."</p>
+          <p className="mt-8">This Agreement is made and entered into by and between <span className="bold">{customer.communityName}</span>, hereinafter referred to as "THE ASSOCIATION," and THE POOL ATTENDANT COMPANY (TPAC), hereinafter referred to as "TPAC."</p>
           <p>WHEREAS, THE ASSOCIATION has chosen to enter into an agreement with TPAC to provide certain amenity monitoring and pool attendant staffing services for the benefit of The Association Members.</p>
           <div className="section-title">1.0 TPAC SERVICE RESPONSIBILITIES INTRODUCTION</div>
           <p>TPAC shall be responsible for all aspects of staffing operations, including recruitment, background checks, drug testing, training, payroll, and employee management. This includes all associated expenses such as payroll taxes, sales taxes, and corporate taxes related to performing services under this Agreement. TPAC shall ensure all staff are properly trained in accordance with the responsibilities outlined herein. TPAC must ensure that no employee elected to perform the duties found within this agreement is deployed to property of The Association who (1) is under eighteen (18) years of age, (2) Possesses a criminal background with violent, sexual, or felony offenses and offenses that could be deemed a threat to the safety of The Association, (3) has offensive or excessive body tattooing that cannot be concealed during their shift, or (4) lacks the appropriate training and/or experience in a related field or of the duties disclosed within this agreement.</p>
@@ -227,19 +225,19 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           <p><span className="bold">1.2.d Communication with Authorities:</span> For situations that necessitate immediate action, including incidents or emergencies, TPAC will contact local authorities as required to ensure the community's safety.</p>
           <p><span className="bold">1.2.e Cleanliness and Organization:</span> Attendants will inspect and maintain the cleanliness of the amenity area, organizing furniture and clearing litter to guarantee that spaces are welcoming and safe for use.</p>
           <p><span className="bold">1.2.f Customer Service Engagement:</span> TPAC attendants will also act as approachable customer service representatives, addressing questions or concerns from residents and guests to enhance their overall experience.</p>
-          <p><span className="bold">1.2.g Other Duties:</span> TPAC staff may also engage in other add-on services to include towel service, wristband distribution, kiosk troubleshooting or instruction for patrons, and other services should they be contracted and paid for by The Association.</p>
         </>
       ))}
 
       {/* Page 3 */}
       {renderPage(3, (
         <>
+          <p><span className="bold">1.2.g Other Duties:</span> TPAC staff may also engage in other add-on services to include towel service, wristband distribution, kiosk troubleshooting or instruction for patrons, and other services should they be contracted and paid for by The Association.</p>
           <div className="section-title">2.0 INSURANCE</div>
           <p>TPAC shall maintain the following coverage for the duration of the pool season(s) contracted.</p>
           <p><span className="bold">2.1 Workers Compensation:</span> Limits of $100,000 per Accident / $500,000 per Policy. Includes a waiver of subrogation in favor of THE ASSOCIATION and the developer if applicable.</p>
-          <p><span className="bold">2.2 General Liability Insurance:</span> Limits of a minimum $1,000,000 per Occurrence / $2,000,000 Aggregate. Includes additional insured status in favor of THE ASSOCIATION, the Owner and Management Company with a waiver of subrogation in favor of the certificate holder. To be added as an additional insured, The Association must contact TPAC via electronic communication sent to admin@thepoolattendantcompany.com.</p>
+          <p><span className="bold">2.2 General Liability Insurance:</span> Limits of a minimum $1,000,000 per Occurrence / $2,000,000 Aggregate. Includes additional insured status in favor of THE ASSOCIATION, the Owner and Management Company with a waiver of subrogation in favor of the certificate holder.</p>
           <p><span className="bold">2.3 Commercial Auto Insurance:</span> Limits of $1,000,000 per Occurrence. Covers all non-owned and hired autos.</p>
-          <p><span className="bold">2.4 Certificates of Insurance:</span> TPAC agrees to supply copies of Certificate of Insurance (Certificate) to THE ASSOCIATION verifying the above-mentioned insurance coverages on the ACORD 25 form (version 2009/01 or later). The Certificate should also provide for a written notice of cancellation to Certificate Holder(s) in accordance with the policy provisions. The Pool Attendant Company shall make available to THE ASSOCIATION, through its records or through the records of its insurers, information regarding any specific claim no later than 5 business days after the request. Failure by THE ASSOCIATION to request such certificate or other evidence of full compliance with these insurance requirements or failure of THE ASSOCIATION to identify a deficiency from evidence that is provided shall not be construed as a waiver of TPAC’s obligation to maintain the insurances disclosed within this agreement.</p>
+          <p><span className="bold">2.4 Certificates of Insurance:</span> TPAC agrees to supply copies of Certificate of Insurance (Certificate) to THE ASSOCIATION verifying the above-mentioned insurance coverages on the ACORD 25 form. The Pool Attendant Company shall make available to THE ASSOCIATION, through its records or through the records of its insurers, information regarding any specific claim no later than 5 business days after the request.</p>
         </>
       ))}
 
@@ -266,7 +264,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
           <p><span className="bold">5.1 Invoice Issuance:</span> Invoices will be issued by TPAC 30 days prior to the start of the service month. This advance notice serves to provide The Association with ample time to review and prepare for payment.</p>
           <p><span className="bold">Example Timeline:</span> Invoice Issued: January 1st. Payment Due: January 31st (for services rendered in February)</p>
           <p><span className="bold">5.2 Payment Terms:</span> TPAC operates under upfront net 30 terms, signifying that payments are to be made in full within 30 days of the invoice date and/or the day before the specified month is to begin.</p>
-          <p><span className="bold">5.3 Adjustments for Hour Discrepancies:</span> In situations where there are discrepancies in hours worked totaling 1 hour or more in a specific month, TPAC employs standard procedures for under/overpayment. Necessary worked hours that were unpaid will be included in the next immediate invoice. Overpayment: Excess hours billed beyond actual worked hours will be reimbursed automatically.</p>
+          <p><span className="bold">5.3 Adjustments for Hour Discrepancies:</span> In situations where there are discrepancies in hours worked totaling 1 hour or more in a specific month, TPAC employs standard procedures for under/overpayment.</p>
           <p><span className="bold">5.4 Late Payment Terms and Penalties:</span> All payments received seven (7) days after their due date shall incur a 3% fee. Should an invoice go beyond fourteen (14) days past its due date without payment, TPAC shall reserve the right to chose to withhold services.</p>
         </>
       ))}
@@ -312,16 +310,16 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
       {/* Page 9 */}
       {renderPage(9, (
         <>
-          <div className="center bold mb-6" style={{ fontSize: '14pt' }}>CONTRACT DURATION AND PRICING SELECTION</div>
+          <div className="center bold mb-10" style={{ fontSize: '15pt', textDecoration: 'underline' }}>CONTRACT DURATION AND PRICING SELECTION</div>
           <p>It shall be assumed that the season duration contracted for the 2026 pool season shall be mirrored similarly to consecutive seasons.</p>
-          <div className="bold">Select contract term (initial one):</div>
-          <div style={{ marginLeft: '20px', lineHeight: '2.5' }}>
-            ☐ One Season - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p1)}/hr</span>.<br/>
-            ☐ Two Seasons - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p2)}/hr</span>.<br/>
-            ☐ Three Seasons - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p3)}/hr</span>.
+          <div className="bold mt-6 mb-4" style={{ fontSize: '13pt' }}>Select contract term (initial one):</div>
+          <div style={{ marginLeft: '40px', lineHeight: '3' }}>
+            ☐ <span className="bold">One Season</span> - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p1)}/hr</span>.<br/>
+            ☐ <span className="bold">Two Seasons</span> - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p2)}/hr</span>.<br/>
+            ☐ <span className="bold">Three Seasons</span> - Initial Date: {fmtDate(customer.startDate)} | Priced at <span className="bold">{fmtMoney(p3)}/hr</span>.
           </div>
-          <div className="bold mt-4">Limitations</div>
-          <p>The total hourly labor volume for one season is <span className="underline">&nbsp;{totalHours.toFixed(1)}&nbsp;</span> pool attendant hours. It is assumed that this amount of hours will be repeated for each season. The Association may adjust staffing schedules without penalty, provided that the overall volume does not decrease by more than 20% of the originally contracted total. This limitation applies cumulatively across all contracted seasons.</p>
+          <div className="bold mt-10 mb-4" style={{ fontSize: '13pt' }}>Limitations</div>
+          <p>The total hourly labor volume for one season is <span className="bold underline">&nbsp;{totalHours.toFixed(1)}&nbsp;</span> pool attendant hours. It is assumed that this amount of hours will be repeated for each season. The Association may adjust staffing schedules without penalty, provided that the overall volume does not decrease by more than 20% of the originally contracted total. This limitation applies cumulatively across all contracted seasons.</p>
         </>
       ))}
 
@@ -329,58 +327,71 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
       {renderPage(10, (
         <>
           <div className="section-title">13.0 SIGNATURES</div>
-          <div className="mt-6">
-            <div className="fill-label">{customer.communityName} (The Association)</div>
-            <p className="fill-label">Full Name & Title: ________________________________________________</p>
-            <p className="fill-label">Signature: _______________________________________________________</p>
-            <p className="fill-label">Date: __________________________</p>
+          <div className="mt-10" style={{ border: '2px solid #000', padding: '20px' }}>
+            <div className="fill-label" style={{ marginTop: '0' }}>{customer.communityName} (The Association)</div>
+            <p className="fill-label" style={{ fontSize: '11pt' }}>Full Name & Title: ________________________________________________</p>
+            <p className="fill-label" style={{ fontSize: '11pt' }}>Signature: _______________________________________________________</p>
+            <p className="fill-label" style={{ fontSize: '11pt' }}>Date: __________________________</p>
           </div>
-          <div className="mt-10">
-            <div className="fill-label">The Pool Attendant Company (TPAC)</div>
-            <p className="fill-label">Full Name & Title: ________________________________________________</p>
-            <p className="fill-label">Signature: _______________________________________________________</p>
-            <p className="fill-label">Date: __________________________</p>
+          <div className="mt-10" style={{ border: '2px solid #000', padding: '20px' }}>
+            <div className="fill-label" style={{ marginTop: '0' }}>The Pool Attendant Company (TPAC)</div>
+            <p className="fill-label" style={{ fontSize: '11pt' }}>Full Name & Title: ________________________________________________</p>
+            <p className="fill-label" style={{ fontSize: '11pt' }}>Signature: _______________________________________________________</p>
+            <p className="fill-label" style={{ fontSize: '11pt' }}>Date: __________________________</p>
           </div>
-          <p className="mt-6 italic text-sm">By executing the above, the parties acknowledge and agree that this agreement is effective, binding, and enforceable as of this date. By signing, the parties affirm their intention to be legally bound by the terms and commit to strict performance of all obligations.</p>
+          <p className="mt-10 italic text-[10pt] text-center">By executing the above, the parties acknowledge and agree that this agreement is effective, binding, and enforceable as of this date. By signing, the parties affirm their intention to be legally bound by the terms and commit to strict performance of all obligations.</p>
         </>
       ))}
 
       {/* Page 11 */}
       {renderPage(11, (
         <>
-          <div className="center bold" style={{ fontSize: '15pt' }}>APPENDIX A: ESTIMATED COSTS</div>
+          <div className="center bold mb-6" style={{ fontSize: '16pt' }}>APPENDIX A: ESTIMATED COSTS</div>
           <p>The following contract schedule is based on a single season hourly price: <span className="bold">{fmtMoney(p1)}</span></p>
-          <table>
-            <thead><tr><th>Month</th><th>Days</th><th>Hours</th><th>Price</th></tr></thead>
-            <tbody>{tableRows}{totalRow}</tbody>
+          <table className="mt-6">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Days Scheduled</th>
+                <th>Staff Hours</th>
+                <th>Monthly Estimated Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableRows}
+              {totalRow}
+            </tbody>
           </table>
-          <p className="bold mt-6">Notes: <span className="underline">{customer.notes || "None"}</span></p>
-          <p style={{fontSize: '10pt', marginTop: '20px', fontStyle: 'italic'}}>These tables serve as a means to convey the estimated cost to The Association only. This estimated price is subject to change pending factors disclosed in this agreement.</p>
-          <div className="bold mt-8">Special Considerations / Notes:</div>
-          <div style={{ border: '1px solid #000', height: '180px', marginTop: '5px' }}></div>
+          <p className="bold mt-10">Additional Notes & Considerations:</p>
+          <div style={{ border: '1.5px solid #000', padding: '15px', minHeight: '120px', fontSize: '11pt' }}>
+            {customer.notes || "No special considerations at this time."}
+          </div>
+          <p style={{fontSize: '9.5pt', marginTop: '25px', fontStyle: 'italic', textAlign: 'center'}}>These tables serve as a means to convey the estimated cost to The Association only. This estimated price is subject to change pending factors disclosed in this agreement.</p>
         </>
       ))}
 
       {/* Page 12 */}
       {renderPage(12, (
         <>
-          <div className="center bold uppercase mb-6">Schedule Overview (Jan - Jun)</div>
+          <div className="center bold uppercase mb-8" style={{ fontSize: '14pt' }}>Schedule Overview (January - June)</div>
           {genCal(0, 5)}
+          <p className="mt-10 text-[9pt] italic text-center">Green highlights indicate scheduled service days. Times and staff counts are subject to Section 9.0.</p>
         </>
       ))}
 
       {/* Page 13 */}
       {renderPage(13, (
         <>
-          <div className="center bold uppercase mb-6">Schedule Overview (Jul - Dec)</div>
+          <div className="center bold uppercase mb-8" style={{ fontSize: '14pt' }}>Schedule Overview (July - December)</div>
           {genCal(6, 11)}
+          <p className="mt-10 text-[9pt] italic text-center">Green highlights indicate scheduled service days. Times and staff counts are subject to Section 9.0.</p>
         </>
       ))}
 
       {/* Page 14 */}
       {renderPage(14, (
         <>
-          <div className="center bold uppercase mb-6">Shift Details (Jan - Jun)</div>
+          <div className="center bold uppercase mb-8" style={{ fontSize: '14pt' }}>Detailed Shift Schedule (January - June)</div>
           {genList(0, 5)}
         </>
       ))}
@@ -388,7 +399,7 @@ export function AgreementPreview({ customer }: { customer: Customer }) {
       {/* Page 15 */}
       {renderPage(15, (
         <>
-          <div className="center bold uppercase mb-6">Shift Details (Jul - Dec)</div>
+          <div className="center bold uppercase mb-8" style={{ fontSize: '14pt' }}>Detailed Shift Schedule (July - December)</div>
           {genList(6, 11)}
         </>
       ))}

@@ -152,6 +152,7 @@ export default function Dashboard() {
       const t = template[dName];
       
       if (t.hasShift) {
+        // Calculate hours
         const parseTime = (timeStr: string) => {
           const [time, ampm] = timeStr.split(' ');
           let [h, min] = time.split(':').map(Number);
@@ -196,6 +197,7 @@ export default function Dashboard() {
     <div className="flex h-screen bg-background overflow-hidden font-body">
       <Toaster />
       
+      {/* Sidebar */}
       <div className="w-80 border-r bg-white flex flex-col no-print shrink-0">
         <div className="p-4 bg-primary text-white flex items-center justify-between shadow-sm">
           <span className="font-bold tracking-tight text-lg">AttendantDesk</span>
@@ -253,6 +255,7 @@ export default function Dashboard() {
         </ScrollArea>
       </div>
 
+      {/* Main Area */}
       <div className="flex-1 flex flex-col no-print min-w-0">
         {currentCustomer ? (
           <>
@@ -276,6 +279,7 @@ export default function Dashboard() {
             </div>
 
             <div className="flex-1 flex overflow-hidden">
+              {/* Form View */}
               <ScrollArea className="flex-1 p-6 bg-slate-50/40">
                 <div className="max-w-4xl mx-auto">
                   <CustomerForm 
@@ -286,6 +290,7 @@ export default function Dashboard() {
                 </div>
               </ScrollArea>
 
+              {/* Quick Schedule Sidebar */}
               <div className="w-[400px] border-l bg-white flex flex-col shrink-0">
                 <div className="p-4 bg-secondary/20 flex items-center justify-between border-b">
                   <h2 className="font-bold flex items-center gap-2 text-primary">
@@ -301,6 +306,7 @@ export default function Dashboard() {
                   />
                 </div>
 
+                {/* Bottom Analytics */}
                 <div className="p-4 border-t bg-slate-50 shrink-0 space-y-3">
                   <div className="flex justify-between items-center text-sm font-bold border-b pb-2">
                     <span className="text-muted-foreground">Volume:</span>
@@ -338,6 +344,7 @@ export default function Dashboard() {
         )}
       </div>
 
+      {/* Modals */}
       {dayModalOpen && selectedDate && (
         <DayModal 
           isOpen={dayModalOpen} 
@@ -360,6 +367,7 @@ export default function Dashboard() {
         onApply={handleApplyTemplate}
       />
 
+      {/* Printable Components */}
       {currentCustomer && <AgreementPreview customer={currentCustomer} />}
     </div>
   );

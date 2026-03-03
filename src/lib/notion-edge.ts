@@ -43,6 +43,7 @@ export function mapNotionToCustomer(page: any, parseSchedule: boolean = false) {
     const keys = Object.keys(props);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
+      // Only check keys that look like YYYY-MM-DD
       if (key.length === 10 && key[4] === '-' && key[7] === '-') {
         const prop = props[key];
         if (prop.type === 'rich_text' && prop.rich_text?.length > 0) {
